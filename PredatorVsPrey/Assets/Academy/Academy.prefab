@@ -1,0 +1,136 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1505106497783814}
+  m_IsPrefabParent: 1
+--- !u!1 &1505106497783814
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4000947397240128}
+  - component: {fileID: 114932966749694870}
+  m_Layer: 0
+  m_Name: Academy
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1618053297542570
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4991614663852038}
+  - component: {fileID: 114707774649446308}
+  m_Layer: 0
+  m_Name: TheBrain
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4000947397240128
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1505106497783814}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 4991614663852038}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4991614663852038
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1618053297542570}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4000947397240128}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114707774649446308
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1618053297542570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c676a8ddf5a5f4f64b35e9ed5028679d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  brainParameters:
+    vectorObservationSize: 70
+    numStackedVectorObservations: 3
+    vectorActionSize: 6
+    cameraResolutions: []
+    vectorActionDescriptions:
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    vectorActionSpaceType: 0
+    vectorObservationSpaceType: 1
+  brainType: 0
+  CoreBrains:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  instanceID: -255042
+--- !u!114 &114932966749694870
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1505106497783814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c11f43b2ad0fe431488346ffd03e50de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxSteps: 0
+  trainingConfiguration:
+    width: 1280
+    height: 720
+    qualityLevel: 1
+    timeScale: 100
+    targetFrameRate: -1
+  inferenceConfiguration:
+    width: 1280
+    height: 720
+    qualityLevel: 5
+    timeScale: 1
+    targetFrameRate: 60
+  resetParameters:
+    resetParameters: []
+  agentRunSpeed: 2
+  agentRotationSpeed: 15
+  spawnAreaMarginMultiplier: 0.5
+  goalScoredMaterial: {fileID: 2100000, guid: f886179ad71d3416f9af88e90f7043a1, type: 2}
+  failMaterial: {fileID: 2100000, guid: f4abcb290251940948a31b349a6f9995, type: 2}
+  gravityMultiplier: 2.5
