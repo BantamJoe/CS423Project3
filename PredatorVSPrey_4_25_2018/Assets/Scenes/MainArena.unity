@@ -799,9 +799,24 @@ MonoBehaviour:
     resetOnDone: 1
     onDemandDecision: 0
     numberOfActionsBetweenDecisions: 1
+  reward: 0
+  cumulativeReward: 0
+  requestAction: 0
+  requestDecision: 0
+  done: 0
+  maxStepReached: 0
+  stepCount: 0
+  hasAlreadyReset: 0
+  terminate: 0
+  id: 0
+  academy: {fileID: 0}
   timeBetweenDecisionsAtInference: 0
+  timeSinceDecision: 0
+  caughtPrey: 0
+  out_of_bounds: 0
   Prey: {fileID: 1072199368}
   speed: 10
+  previousDistance: 3.4028235e+38
 --- !u!4 &1072199368 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4778318390885398, guid: ab28d700b357e7a4eabf850221dfc90c,
@@ -1150,9 +1165,24 @@ MonoBehaviour:
     resetOnDone: 1
     onDemandDecision: 0
     numberOfActionsBetweenDecisions: 1
+  reward: 0
+  cumulativeReward: 0
+  requestAction: 0
+  requestDecision: 0
+  done: 0
+  maxStepReached: 0
+  stepCount: 0
+  hasAlreadyReset: 0
+  terminate: 0
+  id: 0
+  academy: {fileID: 0}
   timeBetweenDecisionsAtInference: 0
+  timeSinceDecision: 0
+  caughtPrey: 0
+  out_of_bounds: 0
   Prey: {fileID: 1740616528}
   speed: 10
+  previousDistance: 3.4028235e+38
 --- !u!1 &1639454459
 GameObject:
   m_ObjectHideFlags: 0
@@ -1194,7 +1224,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1639454459}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01073a8847e9647879339448952dbd09, type: 3}
+  m_Script: {fileID: 11500000, guid: 3b9e541335b794b6f9ae83934960461c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   brain: {fileID: 1815389568}
@@ -1206,6 +1236,7 @@ MonoBehaviour:
     onDemandDecision: 0
     numberOfActionsBetweenDecisions: 1
   timeBetweenDecisionsAtInference: 0.3
+  sightDistance: 0
   Prey: {fileID: 428987903}
   speed: 10
 --- !u!23 &1639454462

@@ -51,7 +51,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Animal pack deluxe\Scripts\MoveCamera.cs" />
      <Compile Include="Assets\ML-Agents\Examples\3DBall\Scripts\Ball3DAcademy.cs" />
      <Compile Include="Assets\ML-Agents\Examples\3DBall\Scripts\Ball3DAgent.cs" />
      <Compile Include="Assets\ML-Agents\Examples\3DBall\Scripts\Ball3DDecision.cs" />
@@ -126,6 +125,7 @@
      <Compile Include="Assets\Scripts\PreyDetect.cs" />
      <Compile Include="Assets\Scripts\preyDetectOld.cs" />
      <Compile Include="Assets\Scripts\ThePredator.cs" />
+     <Compile Include="Assets\Scripts\VisualSystem.cs" />
      <Compile Include="Assets\Scripts\WolfAgent.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>

@@ -4,25 +4,10 @@ using UnityEngine;
 
 public class preyAgent : Agent {
 
-	public GameObject arena;
-    Vector3 arenaPos;
-
 	PredatorPreyAcademy academy;
 
-	Rigidbody agentRB;
-	RayPerception rayPer;
-
-    float arenaSize;
-    float arenaMinX;
-    float arenaMaxX;
-    float arenaMinZ;
-    float arenaMaxZ;
-
-    GameObject myPredator;
-    float initialDistanceToPrey;
-    float currentDistanceToPredator = 9999f;
-
-    int initialFrameCount;
+    private VisualSystem visualSystem;
+    public float sightDistance;
 
     void Awake()
 	{
@@ -35,88 +20,51 @@ public class preyAgent : Agent {
 	{
 		base.InitializeAgent();
 
-		// Cache the agent rigidbody
-		agentRB = GetComponent<Rigidbody>();
+        visualSystem = this.transform.Find("visualIndicators").GetComponent<VisualSystem>();
 
-        // Get the ground's bounds
-
-        arenaPos = arena.transform.position;
-        arenaSize = arena.GetComponent<Collider>().bounds.size.x/2;
-        arenaMinX = arenaSize * -1;
-        arenaMaxX = arenaSize;
-
-        arenaMinZ = arenaSize * -1;
-        arenaMaxZ = arenaSize;
-
-        getMyPredator();
 	}
 
 	public override void CollectObservations()
 	{
-        AddVectorObs((this.transform.position.x - arenaSize) / arenaSize);
-        AddVectorObs((this.transform.position.z - arenaSize) / arenaSize);
+        //AddVectorObs((this.transform.position.x - arenaSize) / arenaSize);
+        //AddVectorObs((this.transform.position.z - arenaSize) / arenaSize);
 
         //Monitor.Log("Reward", GetCumulativeReward(), MonitorType.text, this.transform);
+
+        detectVisibleObjects();
     }
 
-    /// <summary>
-    /// Use the ground's bounds to pick a random spawn position.
-    /// </summary>
-    public Vector3 GetRandomSpawnPos()
-	{
-        
-        bool foundNewSpawnLocation = false;
-		Vector3 randomSpawnPos = Vector3.zero;
-		while (foundNewSpawnLocation == false)
-		{
-            float randomPosX = Random.Range(arenaMinX, arenaMaxX);
-
-            float randomPosZ = Random.Range(arenaMinZ, arenaMaxZ);
-
-            randomSpawnPos = new Vector3(arenaPos.x + randomPosX, 1.2f, arenaPos.z + randomPosZ);
-			if (Physics.CheckBox(randomSpawnPos, new Vector3(2.5f, 0.01f, 2.5f)) == false)
-			{
-                float distanceToPredator = Vector3.Distance(myPredator.transform.position, randomSpawnPos);
-              
-               if(distanceToPredator <= 20)
-               {
-                    foundNewSpawnLocation = true;
-               }                                           
-			}
-		}
-
-        initialFrameCount = Time.frameCount;
-
-        return randomSpawnPos;
-	}
-
-    void getMyPredator()
+    bool[,] detectVisibleObjects()
     {
+        Collider[] visibleObjectColliders = Physics.OverlapSphere(this.transform.position, sightDistance);
+        Dictionary<float, string> visibleObjects = new Dictionary<float, string>();
 
-        myPredator = arena.transform.Find("Predator").gameObject;
-
-        /*
-        GameObject[] predatorArray = GameObject.FindGameObjectsWithTag("predator");
-        float nextPredatorX;
-        float nextPredatorZ;
-
-        foreach (GameObject predator in predatorArray)
+        for (int i = 0; i < visibleObjectColliders.Length; i++)
         {
-            nextPredatorX = predator.transform.position.x;
-            nextPredatorZ = predator.transform.position.z;
+            GameObject nextObject = visibleObjectColliders[i].gameObject;
+            string nextObjectTag = nextObject.tag;
 
-            if (nextPredatorX <= terrainPos.x + arenaMaxX && nextPredatorX >= terrainPos.x + arenaMinX && nextPredatorZ <= terrainPos.z + arenaMaxZ && nextPredatorZ >= terrainPos.z + arenaMinZ)
+            if (nextObjectTag == "obstacle") //Changing this in the prey agent script will allow it to detect predators too
             {
-                myPredator = predator;
+                continue;
             }
-        }
-        */
-    }
 
-    public void hitAnObstacle()
-    {
-        AddReward(-1f);
+            Vector3 nextObjectPosition = nextObject.transform.position;
+
+            //If detecting the prey's own collider, continue
+            if(nextObjectPosition == this.transform.position)
+            {
+                continue;
+            }
+
+            float angleTowardObject = Vector3.SignedAngle(this.transform.forward * -1, this.transform.position - nextObjectPosition, this.transform.up);
+            //Debug.Log("Adding: " + nextObjectTag + " towards: " + angleTowardObject);
+            visibleObjects.Add(angleTowardObject, nextObjectTag);
+        }
+
+        return visualSystem.processVisualFeedback(visibleObjects);
     }
+   
 
 	/// <summary>
 	/// Moves the agent according to the selected action.
@@ -124,34 +72,6 @@ public class preyAgent : Agent {
 	public void MoveAgent(float[] act)
 	{
 
-		Vector3 dirToGo = Vector3.zero;
-		Vector3 rotateDir = Vector3.zero;
-
-        float movement = Mathf.Clamp(act[0], -1, 1);
-        float rotation = Mathf.Clamp(act[1], -1, 1);
-
-        
-        if(movement > 0)
-        {
-            dirToGo = transform.forward * 1f;
-        }
-        else if(movement < 0)
-        {
-            dirToGo = transform.forward * -1f;
-        }
-        
-        if (rotation > 0)
-        {
-            rotateDir = transform.up * -1;
-        }
-        else if (rotation < 0)
-        {
-            rotateDir = transform.up * 1f;
-        }
-
-		transform.Rotate(rotateDir, Time.fixedDeltaTime * 200f);
-		agentRB.AddForce(dirToGo * academy.agentRunSpeed,
-			ForceMode.VelocityChange);
 	}
 
 	/// <summary>
@@ -170,9 +90,9 @@ public class preyAgent : Agent {
 	public override void AgentReset()
 	{
 
-		transform.position = GetRandomSpawnPos();
-		agentRB.velocity = Vector3.zero;
-		agentRB.angularVelocity = Vector3.zero;
+		//transform.position = GetRandomSpawnPos();
+		//agentRB.velocity = Vector3.zero;
+		//agentRB.angularVelocity = Vector3.zero;
 	}
 		
 }

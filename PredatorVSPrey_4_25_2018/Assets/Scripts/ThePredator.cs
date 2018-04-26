@@ -5,7 +5,11 @@ using UnityEngine;
 public class ThePredator : Agent {
 	private PredatorPreyAcademy academy;
 	public float timeBetweenDecisionsAtInference;
-	private float timeSinceDecision;
+
+    private VisualSystem visualSystem;
+    public float sightDistance;
+
+    private float timeSinceDecision;
 	bool caughtPrey = false;
 	bool out_of_bounds = false;
 	// Use this for initialization
@@ -16,7 +20,8 @@ public class ThePredator : Agent {
 	public override void InitializeAgent()
 	{
 		academy = FindObjectOfType(typeof(PredatorPreyAcademy)) as PredatorPreyAcademy;
-	}
+        visualSystem = this.transform.Find("visualIndicators").GetComponent<VisualSystem>();
+    }
 
 /************************************************************************************************************/
 /* Here we should reset the Predator if:								  
@@ -55,12 +60,36 @@ public class ThePredator : Agent {
 /*************************************************************************************************************/	
 	public override void CollectObservations()
 	{
-		
+       detectVisibleObjects();
+    }
 
-	}
-/******************************************************************************************************/
-/******************************************************************************************************/
-	public float speed = 10;
+    bool[,] detectVisibleObjects()
+    {
+        Collider[] visibleObjectColliders = Physics.OverlapSphere(this.transform.position, sightDistance);
+        Dictionary<float, string> visibleObjects = new Dictionary<float, string>();
+
+        for (int i = 0; i < visibleObjectColliders.Length; i++)
+        {
+            GameObject nextObject = visibleObjectColliders[i].gameObject;
+            string nextObjectTag = nextObject.tag;
+
+            if (nextObjectTag != "prey") //Changing this in the prey agent script will allow it to detect predators too
+            {
+                continue;
+            }
+
+            Vector3 nextObjectPosition = nextObject.transform.position;
+            float angleTowardObject = Vector3.SignedAngle(this.transform.forward * -1, this.transform.position - nextObjectPosition, this.transform.up);
+            //Debug.Log("Adding: " + nextObjectTag + " towards: " + angleTowardObject);
+            visibleObjects.Add(angleTowardObject, nextObjectTag);
+        }
+
+        return visualSystem.processVisualFeedback(visibleObjects);
+    }
+
+    /******************************************************************************************************/
+    /******************************************************************************************************/
+    public float speed = 10;
 	private float previousDistance = float.MaxValue;
 	public override void AgentAction(float[] vectorAction,string textAction)
 	{
