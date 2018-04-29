@@ -46,6 +46,7 @@ public class ThePredator : Agent {
                 prey.SetActive(true);
             }
         }
+		killCount = 0;
 	}
 /**************************************************************************************************************/
 /* The predator should collect these observations 							 
