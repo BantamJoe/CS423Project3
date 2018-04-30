@@ -20,10 +20,13 @@ public class ThePredator : Agent {
 
     public Transform Prey;
     private List<GameObject> killedPrey;
+
+	Vector3 startingPosition;
 	// Use this for initialization
 	void Start () 
 	{
 		killedPrey = new List <GameObject>();
+		startingPosition = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z);
 	}
 	public override void InitializeAgent()
 	{
@@ -46,6 +49,15 @@ public class ThePredator : Agent {
                 prey.SetActive(true);
             }
         }
+
+
+		//reset position of predator
+		if (isOutOfBounds () == true) 
+		{
+			
+			Debug.Log ("test");
+		    this.transform.position = startingPosition;
+		}
 		killCount = 0;
 	}
 /**************************************************************************************************************/
@@ -227,7 +239,32 @@ public class ThePredator : Agent {
             }
         }
 
+		if(isOutOfBounds() == true)
+		{
+			AddReward (-0.5f);
+			Done();
+		}
+			
+
         //time penalty
         AddReward(-0.02f);    
     }
+
+	public bool isOutOfBounds()
+	{
+		if (this.transform.position.x > 250 || this.transform.position.x < -250) 
+		{
+			return true;
+		}
+
+		if (this.transform.position.z > 250 || this.transform.position.z < -250) {
+			return true;
+		} 
+		else 
+		{
+			return false;
+
+		}
+
+	}
 }
