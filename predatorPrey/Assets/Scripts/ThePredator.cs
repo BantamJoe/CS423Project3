@@ -21,6 +21,12 @@ public class ThePredator : Agent {
     public Transform Prey;
     private List<GameObject> killedPrey;
 
+	private GameObject arena;
+	private float arenaRadius;
+
+	public GameObject monitor;
+
+
 	Vector3 startingPosition;
 	// Use this for initialization
 	void Start () 
@@ -32,6 +38,8 @@ public class ThePredator : Agent {
 	{
 		academy = FindObjectOfType(typeof(MainAcademy)) as MainAcademy;
         visualSystem = this.transform.Find("predatorVisualSystem").GetComponent<predatorVisualSystem>();
+		arena = GameObject.Find("Arena");
+		arenaRadius = arena.GetComponent<MeshCollider>().bounds.extents.x;
     }
 /************************************************************************************************************/
 /* Here we should reset the Predator if:								  
@@ -49,16 +57,19 @@ public class ThePredator : Agent {
                 prey.SetActive(true);
             }
         }
-
-
+		currentTargetPrey = null;
+		lastKill = null;
+		killCount = 0;
+		/*
 		//reset position of predator
 		if (isOutOfBounds () == true) 
 		{
 			
-			Debug.Log ("test");
+		
 		    this.transform.position = startingPosition;
 		}
 		killCount = 0;
+		*/
 	}
 /**************************************************************************************************************/
 /* The predator should collect these observations 							 
@@ -70,6 +81,10 @@ public class ThePredator : Agent {
 	public override void CollectObservations()
 	{
         AddVectorObs(detectVisibleObjects());
+		AddVectorObs((this.transform.position.x) / arenaRadius);
+		AddVectorObs((this.transform.position.z) / arenaRadius);
+
+		Monitor.Log("Reward", GetCumulativeReward(), MonitorType.text, monitor.transform);
 
     }
 
@@ -89,8 +104,12 @@ public class ThePredator : Agent {
 
             Vector3 nextObjectPosition = nextObject.transform.position;
             float angleTowardObject = Vector3.SignedAngle(this.transform.forward * -1, this.transform.position - nextObjectPosition, this.transform.up);
+			if (!visibleObjects.ContainsKey(angleTowardObject))
+			{
+				visibleObjects.Add(angleTowardObject, nextObject);
+			}
             //Debug.Log("Adding: " + nextObjectTag + " towards: " + angleTowardObject);
-            visibleObjects.Add(angleTowardObject, nextObject);
+            //visibleObjects.Add(angleTowardObject, nextObject);
         }
 
         return visualSystem.processVisualFeedback(visibleObjects);
@@ -194,11 +213,15 @@ public class ThePredator : Agent {
         //Try to target a nearby prey
         currentTargetPrey = isCloseEnoughToAttack();
      
-        
+		if(visualSystem.visiblePrey.Count > 0)
+		{
+			AddReward(0.01f);
+		}
       
         //If there is a prey close enough to attack, and we arent on cooldown
         if (currentTargetPrey != null && isCoolDown == false)
         {
+			AddReward (0.3f);
            // We are in attack phase
            if(isCoolDown == false)
            { 
