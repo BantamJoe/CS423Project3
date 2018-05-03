@@ -24,7 +24,7 @@ public class ThePredator : Agent {
 	private GameObject arena;
 	private float arenaRadius;
 
-	public GameObject monitor;
+	//public GameObject monitor;
 
 
 	Vector3 startingPosition;
@@ -60,7 +60,7 @@ public class ThePredator : Agent {
 		currentTargetPrey = null;
 		lastKill = null;
 		killCount = 0;
-		/*
+
 		//reset position of predator
 		if (isOutOfBounds () == true) 
 		{
@@ -68,8 +68,7 @@ public class ThePredator : Agent {
 		
 		    this.transform.position = startingPosition;
 		}
-		killCount = 0;
-		*/
+
 	}
 /**************************************************************************************************************/
 /* The predator should collect these observations 							 
@@ -84,7 +83,7 @@ public class ThePredator : Agent {
 		AddVectorObs((this.transform.position.x) / arenaRadius);
 		AddVectorObs((this.transform.position.z) / arenaRadius);
 
-		Monitor.Log("Reward", GetCumulativeReward(), MonitorType.text, monitor.transform);
+		//Monitor.Log("Reward", GetCumulativeReward(), MonitorType.text, monitor.transform);
 
     }
 
